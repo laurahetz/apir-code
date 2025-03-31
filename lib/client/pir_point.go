@@ -74,7 +74,8 @@ func (c *PIR) ReconstructBytes(a [][]byte) (interface{}, error) {
 
 // Reconstruct reconstruct the entry of the database from answers
 func (c *PIR) Reconstruct(answers [][]byte) ([]byte, error) {
-	return reconstructPIR(answers, c.dbInfo, c.state)
+
+	return reconstructPIR(uint32(c.state.iy), answers, c.dbInfo, c.state)
 }
 
 func (c *PIR) secretShare(numServers int) ([][]byte, error) {

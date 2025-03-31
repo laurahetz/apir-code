@@ -46,7 +46,7 @@ func decodeAnswer(in [][]byte) ([][]uint32, error) {
 
 // reconstructPIR returns the database entry for the classical PIR schemes.
 // These schemes are used as a baseline for the evaluation of the VPIR schemes.
-func reconstructPIR(answers [][]byte, dbInfo *database.Info, state *state) ([]byte, error) {
+func reconstructPIR(idx uint32, answers [][]byte, dbInfo *database.Info, state *state) ([]byte, error) {
 	switch dbInfo.PIRType {
 	case "classical", "":
 		return reconstructValuePIR(answers, dbInfo, state)
@@ -61,7 +61,7 @@ func reconstructPIR(answers [][]byte, dbInfo *database.Info, state *state) ([]by
 		// check Merkle proof
 		encodedProof := block[len(block)-dbInfo.ProofLen:]
 		proof := merkle.DecodeProof(encodedProof)
-		verified, err := merkle.VerifyProof(data, proof, dbInfo.Root)
+		verified, err := merkle.VerifyProof(data, proof, idx, dbInfo.Root)
 		if err != nil {
 			log.Fatalf("impossible to verify proof: %v", err)
 		}

@@ -66,7 +66,7 @@ func TestProofVerification(t *testing.T) {
 		require.Equal(t, *proof, *p)
 
 		// check if proof verifies
-		vrf, err := VerifyProof(data[i], proof, tree.Root())
+		vrf, err := VerifyProof(data[i], proof, uint32(i), tree.Root())
 		require.NoError(t, err)
 		if !vrf {
 			t.Fatal("Proof with index ", i, " did not verify")

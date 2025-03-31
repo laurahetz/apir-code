@@ -42,8 +42,8 @@ func newProof(hashes [][]byte, index uint32) *Proof {
 // against historical trees without having to instantiate them.
 //
 // This returns true if the proof is verified, otherwise false.
-func VerifyProof(data []byte, proof *Proof, root []byte) (bool, error) {
-	return VerifyProofUsing(data, proof, root, NewBLAKE3())
+func VerifyProof(data []byte, proof *Proof, idx uint32, root []byte) (bool, error) {
+	return VerifyProofUsing(data, proof, idx, root, NewBLAKE3())
 }
 
 // VerifyProofUsing verifies a Merkle tree proof for a piece of data using the provided hash type.
@@ -52,10 +52,13 @@ func VerifyProof(data []byte, proof *Proof, root []byte) (bool, error) {
 // against historical trees without having to instantiate them.
 //
 // This returns true if the proof is verified, otherwise false.
-func VerifyProofUsing(data []byte, proof *Proof, root []byte, hashType HashType) (bool, error) {
+func VerifyProofUsing(data []byte, proof *Proof, idx uint32, root []byte, hashType HashType) (bool, error) {
 	proofHash := generateProofHash(data, proof, hashType)
 	if bytes.Equal(root, proofHash) {
 		return true, nil
+	}
+	if idx != proof.Index {
+		return false, nil
 	}
 	return false, nil
 }
